@@ -1,0 +1,7 @@
+---
+source: src/fof.rs
+assertion_line: 1035
+expression: parsed
+snapshot_kind: text
+---
+p

@@ -16,7 +16,7 @@ FofAnnotated(
                 "axiom",
             ),
         ),
-        formula: Formula(
+        formula: Logic(
             Unitary(
                 Atomic(
                     Defined(

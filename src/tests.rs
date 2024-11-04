@@ -22,7 +22,7 @@ macro_rules! parse_snapshot {
     ($T: ident, $input: expr) => {
         let parsed = crate::tests::check_parse($T::parse, $input);
         insta::assert_debug_snapshot!(parsed);
-        insta::assert_display_snapshot!(parsed);
+        insta::assert_snapshot!(parsed);
     };
 }
 

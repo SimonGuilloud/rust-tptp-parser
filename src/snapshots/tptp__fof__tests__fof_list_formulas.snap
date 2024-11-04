@@ -1,9 +1,11 @@
 ---
-source: src/top.rs
+source: src/fof.rs
+assertion_line: 1035
 expression: parsed
+snapshot_kind: text
 ---
-Fof(
-    Logic(
+ListFormula(
+    [
         Unitary(
             Atomic(
                 Plain(
@@ -23,5 +25,5 @@ Fof(
                 ),
             ),
         ),
-    ),
+    ],
 )

@@ -1,11 +1,14 @@
 ---
 source: src/fof.rs
 expression: parsed
+snapshot_kind: text
 ---
-Logic(
-    Unary(
-        Unary(
-            UnaryConnective,
+LogicSequent {
+    left: ListFormula(
+        [],
+    ),
+    right: ListFormula(
+        [
             Unary(
                 Unary(
                     UnaryConnective,
@@ -30,6 +33,6 @@ Logic(
                     ),
                 ),
             ),
-        ),
+        ],
     ),
-)
+}

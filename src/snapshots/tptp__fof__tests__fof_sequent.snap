@@ -1,0 +1,13 @@
+---
+source: src/fof.rs
+expression: parsed
+snapshot_kind: text
+---
+LogicSequent {
+    left: ListFormula(
+        [],
+    ),
+    right: ListFormula(
+        [],
+    ),
+}

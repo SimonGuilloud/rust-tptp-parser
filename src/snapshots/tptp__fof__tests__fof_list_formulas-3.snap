@@ -1,0 +1,47 @@
+---
+source: src/fof.rs
+expression: parsed
+snapshot_kind: text
+---
+ListFormula(
+    [
+        Unitary(
+            Atomic(
+                Plain(
+                    PlainAtomicFormula(
+                        Constant(
+                            Constant(
+                                Functor(
+                                    Lower(
+                                        LowerWord(
+                                            "p",
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        ),
+        Unitary(
+            Atomic(
+                Plain(
+                    PlainAtomicFormula(
+                        Constant(
+                            Constant(
+                                Functor(
+                                    Lower(
+                                        LowerWord(
+                                            "q",
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        ),
+    ],
+)

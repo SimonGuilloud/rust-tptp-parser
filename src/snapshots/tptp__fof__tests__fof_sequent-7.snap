@@ -1,0 +1,62 @@
+---
+source: src/fof.rs
+expression: parsed
+snapshot_kind: text
+---
+LogicSequent {
+    left: ListFormula(
+        [
+            Binary(
+                Assoc(
+                    And(
+                        AndFormula(
+                            [
+                                Unitary(
+                                    Atomic(
+                                        Plain(
+                                            PlainAtomicFormula(
+                                                Constant(
+                                                    Constant(
+                                                        Functor(
+                                                            Lower(
+                                                                LowerWord(
+                                                                    "p",
+                                                                ),
+                                                            ),
+                                                        ),
+                                                    ),
+                                                ),
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                                Unitary(
+                                    Atomic(
+                                        Plain(
+                                            PlainAtomicFormula(
+                                                Constant(
+                                                    Constant(
+                                                        Functor(
+                                                            Lower(
+                                                                LowerWord(
+                                                                    "q",
+                                                                ),
+                                                            ),
+                                                        ),
+                                                    ),
+                                                ),
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ],
+                        ),
+                    ),
+                ),
+            ),
+        ],
+    ),
+    right: ListFormula(
+        [],
+    ),
+}

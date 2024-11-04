@@ -2,7 +2,7 @@
 source: src/fof.rs
 expression: parsed
 ---
-Formula(
+Logic(
     Unitary(
         Atomic(
             Plain(

@@ -1,0 +1,6 @@
+---
+source: src/fof.rs
+expression: parsed
+snapshot_kind: text
+---
+[p&q,r]-->[]

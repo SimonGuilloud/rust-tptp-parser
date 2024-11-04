@@ -1,0 +1,6 @@
+---
+source: src/fof.rs
+expression: parsed
+snapshot_kind: text
+---
+[]-->[(![X,Y,Z]:?[Q]:Q!=p(A))&p&(q=>r)]

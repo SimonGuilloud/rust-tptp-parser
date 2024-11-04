@@ -4,7 +4,7 @@ use derive_more::Display;
 use nom::branch::alt;
 use nom::bytes::streaming::tag;
 use nom::combinator::{map, opt, value};
-use nom::multi::separated_list1;
+use nom::multi::{separated_list1, separated_list0};
 use nom::sequence::{delimited, pair, preceded, tuple};
 #[cfg(feature = "serde")]
 use serde::Serialize;
@@ -771,14 +771,61 @@ impl<'a, E: Error<'a>> Parse<'a, E> for LogicFormula<'a> {
     }
 }
 
+#[derive(Clone, Debug, Display, PartialOrd, Ord, PartialEq, Eq, Hash)]
+#[display(fmt = "{}", "Separated(',', _0)")]
+#[cfg_attr(feature = "serde", derive(Serialize))]
+pub struct ListFormula<'a>(pub Vec<LogicFormula<'a>>);
+
+impl<'a, E: Error<'a>> Parse<'a, E> for ListFormula<'a> {
+    fn parse(x: &'a [u8]) -> Result<Self, E> {
+        map(
+            delimited(ignored,  separated_list0(
+                delimited(ignored, tag(","), ignored),
+                LogicFormula::parse,
+            ), ignored),
+            Self
+        )(x)
+    }
+}
+
+#[derive(Clone, Debug, Display, PartialOrd, Ord, PartialEq, Eq, Hash)]
+#[display(fmt = "[{}]-->[{}]", left, right)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
+pub struct LogicSequent<'a> {
+    pub left: ListFormula<'a>,
+    pub right: ListFormula<'a>,
+}
+
+impl<'a, E: Error<'a>> Parse<'a, E> for LogicSequent<'a> {
+    fn parse(x: &'a [u8]) -> Result<Self, E> {
+        map(
+            tuple((
+                brackets,
+                delimited(ignored, tag("-->"), ignored),
+                brackets,
+            )),
+            |(left, _, right)| Self { left, right }
+        )(x)
+    }
+}
+
+
 /// [`fof_formula`](http://tptp.org/TPTP/SyntaxBNF.html#fof_formula)
 #[derive(Clone, Debug, Display, PartialOrd, Ord, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
-pub struct Formula<'a>(pub LogicFormula<'a>);
+pub enum Formula<'a> {
+    Logic(LogicFormula<'a>),
+    Sequent(LogicSequent<'a>),
+}
+//pub struct Formula<'a>(pub LogicFormula<'a>);
 
 impl<'a, E: Error<'a>> Parse<'a, E> for Formula<'a> {
     fn parse(x: &'a [u8]) -> Result<Self, E> {
-        map(LogicFormula::parse, Formula)(x)
+        alt((
+            map(LogicFormula::parse, Formula::Logic),
+            map(LogicSequent::parse, Formula::Sequent)
+        ))(x)
+
     }
 }
 
@@ -983,6 +1030,27 @@ mod tests {
     }
 
     #[test]
+    fn test_fof_list_formulas() {
+        check_size::<ListFormula>();
+        parse_snapshot!(ListFormula, b"p\0");
+        parse_snapshot!(ListFormula, b"p, q\0");
+        parse_snapshot!(ListFormula, b"p, q, r\0");
+    }
+
+    #[test]
+    fn test_fof_sequent() {
+        check_size::<LogicSequent>();
+        parse_snapshot!(LogicSequent, b"[] --> []\0");
+        parse_snapshot!(LogicSequent, b"[] --> [~p]\0");
+        parse_snapshot!(LogicSequent, b"[p] --> [p => q]\0");
+        parse_snapshot!(LogicSequent, b"[p & q] --> []\0");
+        parse_snapshot!(LogicSequent, b"[p & q, r] --> []\0");
+        parse_snapshot!(LogicSequent, b"[p & q] --> [p & q, ~p]\0");
+        parse_snapshot!(LogicSequent, b"[~p => q, p => ~q, p] --> [p & q, $false, r]\0");
+        parse_snapshot!(LogicSequent, b"[] --> [(![X,Y,Z]:?[Q]:Q!=p(A))&p&(q=>r)]\0");
+    }
+
+    #[test]
     fn test_fof_formula() {
         check_size::<Formula>();
         parse_snapshot!(Formula, b"p\0");
@@ -990,5 +1058,9 @@ mod tests {
         parse_snapshot!(Formula, b"(p)\0");
         parse_snapshot!(Formula, b"$true|$false\0");
         parse_snapshot!(Formula, b"(![X,Y,Z]:?[Q]:Q!=p(A))&p&(q=>r)\0");
+        parse_snapshot!(Formula, b"[p] --> [p => q]\0");
+        parse_snapshot!(Formula, b"[] --> [(![X,Y,Z]:?[Q]:Q!=p(A))&p&(q=>r)]\0");
+        parse_snapshot!(Formula, b"[p & q, r] --> []\0");
+        parse_snapshot!(Formula, b"[(![X,Y,Z]:?[Q]:Q!=p(A))&p&(q=>r)] --> [p & q, ~p]\0"); 
     }
 }

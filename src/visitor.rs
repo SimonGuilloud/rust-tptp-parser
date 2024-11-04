@@ -816,8 +816,33 @@ pub trait Visitor<'a> {
         }
     }
 
+
+    fn visit_fof_list_formula(
+        &mut self,
+        fof_list_formula: &fof::ListFormula<'a>,
+    ) {
+        for fof_logic_formula in &*fof_list_formula.0 {
+            self.visit_fof_logic_formula(fof_logic_formula);
+        }
+    }
+
+    fn visit_fof_logic_sequent(
+        &mut self,
+        fof_logic_sequent: &fof::LogicSequent<'a>,
+    ) {
+        self.visit_fof_list_formula(&fof_logic_sequent.left);
+        self.visit_fof_list_formula(&fof_logic_sequent.right);
+    }
+
     fn visit_fof_formula(&mut self, fof_formula: &fof::Formula<'a>) {
-        self.visit_fof_logic_formula(&fof_formula.0);
+        match fof_formula {
+            fof::Formula::Logic(fof_logic_formula) => {
+                self.visit_fof_logic_formula(fof_logic_formula)
+            }
+            fof::Formula::Sequent(fof_logic_sequent) => {
+                self.visit_fof_logic_sequent(fof_logic_sequent)
+            }
+        }
     }
 
     fn visit_literal(&mut self, literal: &cnf::Literal<'a>) {

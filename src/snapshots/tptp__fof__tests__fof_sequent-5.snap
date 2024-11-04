@@ -1,0 +1,79 @@
+---
+source: src/fof.rs
+expression: parsed
+snapshot_kind: text
+---
+LogicSequent {
+    left: ListFormula(
+        [
+            Unitary(
+                Atomic(
+                    Plain(
+                        PlainAtomicFormula(
+                            Constant(
+                                Constant(
+                                    Functor(
+                                        Lower(
+                                            LowerWord(
+                                                "p",
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        ],
+    ),
+    right: ListFormula(
+        [
+            Binary(
+                Nonassoc(
+                    BinaryNonassoc {
+                        left: Unitary(
+                            Atomic(
+                                Plain(
+                                    PlainAtomicFormula(
+                                        Constant(
+                                            Constant(
+                                                Functor(
+                                                    Lower(
+                                                        LowerWord(
+                                                            "p",
+                                                        ),
+                                                    ),
+                                                ),
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
+                        op: LRImplies,
+                        right: Unitary(
+                            Atomic(
+                                Plain(
+                                    PlainAtomicFormula(
+                                        Constant(
+                                            Constant(
+                                                Functor(
+                                                    Lower(
+                                                        LowerWord(
+                                                            "q",
+                                                        ),
+                                                    ),
+                                                ),
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
+                    },
+                ),
+            ),
+        ],
+    ),
+}
